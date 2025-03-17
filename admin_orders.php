@@ -17,7 +17,6 @@ $password = "Ashmit@1203*";
 $isAdmin = strpos($_SERVER['PHP_SELF'], '/admin/') !== false;
 $basePath = $isAdmin ? '../' : '';
 
-
 // Establishing the database connection
 global $conn;
 $conn = pg_connect("host=$host dbname=$dbname user=$user password=$password");
@@ -76,12 +75,41 @@ if (isset($_GET['delete'])) {
    <!-- Font Awesome CDN link -->
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
-   <!-- Custom admin CSS file link -->
-<!--    <link rel="stylesheet" href="../admin_style.css"> -->
+   <!-- Custom CSS -->
+   <style>
+      .orders .box-container .box {
+         padding: 2rem;
+         border: var(--border);
+         background-color: var(--white);
+         box-shadow: var(--box-shadow);
+         border-radius: .5rem;
+         margin: 1rem 0;
+         min-width: 300px;
+         max-width: 500px;
+         word-wrap: break-word;
+         overflow: hidden;
+      }
 
-<!-- CSS & JS Linking (✅ Corrected Placement) -->
-    <link rel="stylesheet" href="<?= $basePath ?>css/<?= $isAdmin ? 'admin_style.css' : 'style.css' ?>">
-    <script src="<?= $basePath ?>js/<?= $isAdmin ? 'admin_script.js' : 'script.js' ?>"></script>
+      .orders .box-container .box p {
+         margin: .5rem 0;
+         line-height: 1.8;
+         font-size: 1.7rem;
+         overflow-wrap: anywhere;
+      }
+
+      .orders .box-container .box span {
+         color: var(--black);
+         margin-left: 5px;
+      }
+
+      .orders .box-container .box form {
+         margin-top: 1.5rem;
+      }
+   </style>
+
+   <!-- CSS & JS Linking -->
+   <link rel="stylesheet" href="<?= $basePath ?>css/<?= $isAdmin ? 'admin_style.css' : 'style.css' ?>">
+   <script src="<?= $basePath ?>js/<?= $isAdmin ? 'admin_script.js' : 'script.js' ?>"></script>
     
 </head>
 <body>
@@ -113,15 +141,17 @@ if (!empty($_SESSION['message'])) {
          while ($fetch_orders = pg_fetch_assoc($select_orders)) {
       ?>
       <div class="box">
-         <p> User ID: <span><?php echo htmlspecialchars($fetch_orders['user_id']); ?></span> </p>
-         <p> Placed on: <span><?php echo htmlspecialchars($fetch_orders['placed_on']); ?></span> </p>
-         <p> Name: <span><?php echo htmlspecialchars($fetch_orders['name']); ?></span> </p>
-         <p> Number: <span><?php echo htmlspecialchars($fetch_orders['number']); ?></span> </p>
-         <p> Email: <span><?php echo htmlspecialchars($fetch_orders['email']); ?></span> </p>
-         <p> Address: <span><?php echo htmlspecialchars($fetch_orders['address']); ?></span> </p>
-         <p> Total Products: <span><?php echo htmlspecialchars($fetch_orders['total_products']); ?></span> </p>
-         <p> Total Price: <span>$<?php echo htmlspecialchars($fetch_orders['total_price']); ?>/-</span> </p>
-         <p> Payment Method: <span><?php echo htmlspecialchars($fetch_orders['method']); ?></span> </p>
+         <div class="content-wrapper">
+             <p> User ID: <span><?php echo htmlspecialchars($fetch_orders['user_id']); ?></span> </p>
+             <p> Placed on: <span><?php echo htmlspecialchars($fetch_orders['placed_on']); ?></span> </p>
+             <p> Name: <span><?php echo htmlspecialchars($fetch_orders['name']); ?></span> </p>
+             <p> Number: <span><?php echo htmlspecialchars($fetch_orders['number']); ?></span> </p>
+             <p> Email: <span><?php echo htmlspecialchars($fetch_orders['email']); ?></span> </p>
+             <p> Address: <span><?php echo htmlspecialchars($fetch_orders['address']); ?></span> </p>
+             <p> Total Products: <span><?php echo htmlspecialchars($fetch_orders['total_products']); ?></span> </p>
+             <p> Total Price: <span>$<?php echo htmlspecialchars($fetch_orders['total_price']); ?>/-</span> </p>
+             <p> Payment Method: <span><?php echo htmlspecialchars($fetch_orders['method']); ?></span> </p>
+         </div>
          <form action="" method="post">
             <input type="hidden" name="order_id" value="<?php echo htmlspecialchars($fetch_orders['id']); ?>">
             <select name="update_payment">
@@ -141,9 +171,6 @@ if (!empty($_SESSION['message'])) {
       ?>
    </div>
 </section>
-
-<!-- Custom admin JS file link -->
-<script src="../admin_script.js"></script>
 
 </body>
 </html>
